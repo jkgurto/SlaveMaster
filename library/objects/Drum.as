@@ -1,4 +1,4 @@
-﻿package library.objects {
+﻿package game.library.objects {
 	import flash.display.*;
 	import flash.events.*;
 	//import library.objects.*;
@@ -15,13 +15,13 @@
 		/*
 			hit a beat on the drum, record beats within the object and link to timer
 		*/
-		public function doBeat(void):void {
+		public function doBeat(time:int):void {
 			//TODO
-			
+			trace(time);			
 		}
 		
 		public function getBPM():int {
-			
+			return 100;
 		}
 		
 	}
