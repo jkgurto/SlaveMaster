@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application
+    xmlns:mx="http://www.adobe.com/2006/mxml"
+
+    layout="absolute"
+
+    width="800"
+    height="600"
+    frameRate="24"
+    
+    enterFrame="enterFrame(event)"
+
+    currentState="StartState"
+    >
+    
+    <mx:states>
+    
+        <mx:State
+            name="StartState"
+            enterState="enterStartState(event)"
+            exitState="exitStartState(event)"
+            >
+            <mx:AddChild relativeTo="{canvas}" position="lastChild">
+                <mx:Button x="309" y="206" label="Start" id="startButton" click="startButtonClicked(event)"/>
+            </mx:AddChild>
+        </mx:State>
+    
+        <mx:State
+            name="PlayState"
+            enterState="enterPlayState(event)"
+            exitState="exitPlayState(event)"
+            >
+        </mx:State>
+                
+        <mx:State
+            name="PausedState"
+            enterState="enterPausedState(event)"
+            exitState="exitPausedState(event)"
+            >
+            <mx:AddChild relativeTo="{canvas}" position="lastChild">
+                <mx:Button x="367" y="201" label="Continue" id="continueButton" click="continueButtonClicked(event)"/>
+            </mx:AddChild>
+        </mx:State>
+            
+        <mx:State
+            name="GameOverState"
+            enterState="enterGameOverState(event)"
+            exitState="exitGameOverState(event)"
+            >
+            <mx:AddChild relativeTo="{canvas}" position="lastChild">
+                <mx:Button x="287" y="183" label="Play Again" id="playAgainButton" click="playAgainButtonClicked(event)"/>
+            </mx:AddChild>
+        </mx:State>
+
+    </mx:states>
+
+    <mx:Canvas
+        id="canvas"
+
+        x="0"
+        y="0"
+
+        width="100%"
+        height="100%"
+        >
+    </mx:Canvas>
+
+    <mx:Script
+        source="SlaveMaster.as"
+        >
+    </mx:Script>
+    
+</mx:Application>
