@@ -1,8 +1,8 @@
-﻿package game.library{
+﻿package library{
 
 	import flash.display.*;
 	import flash.events.*;
-	import game.library.objects.*;
+	//import game.library.objects.*;
 
 	public class Controller extends flash.display.MovieClip {
 

@@ -1,4 +1,4 @@
-﻿package game.library.objects {
+﻿package library.objects {
 	import flash.display.*;
 	import flash.events.*;
 	import flash.utils.Timer;

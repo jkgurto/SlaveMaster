@@ -1,4 +1,4 @@
-﻿package game.library.objects {
+﻿package library.objects {
 	public class Position {
 		
 		private var xPosition = 0;
