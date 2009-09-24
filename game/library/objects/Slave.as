@@ -5,6 +5,9 @@ package game.library.objects {
 	public class Slave extends assets.Assets_slaveClass {
 	    
 	    // ------- Properties -------
+	    public static const DEFAULT_MAX_WHIPS:int = 10;
+	    public static const DEFAULT_OUTPUT:int = 1;
+	    
 	    
 	    // Counts the number of slaves created.
 	    private static var slaveCount:uint = 0;
@@ -12,8 +15,12 @@ package game.library.objects {
 		
 		private var _id:uint;
 		private var _type:String;    // type descriptor of slave
-		private var _numWhips:int;   // number of times whipped
-		private var _maxWhips:int;   // maximum number of whips
+		
+		// number of times whipped
+		private var _numWhips:int = DEFAULT_MAX_WHIPS;
+		// maximum number of whips
+		private var _maxWhips:int = DEFAULT_MAX_WHIPS;
+		
 		private var _thirst:int;     // thirst as a percentage
 		private var _morale:int;     // percentage
 		private var _emotion:String; // enum for emotion
@@ -31,6 +38,8 @@ package game.library.objects {
 		    // name is inherited from sprite
 		    // position is also inherited
 		    name = "Default slave";
+		    
+		    _output = DEFAULT_OUTPUT;
 		    
 		    myHands = new Hands();
 			myHands.x = -68.3;
@@ -104,7 +113,16 @@ package game.library.objects {
 		}
 		
 		public function doWhip():void {
-			trace("ouch! i got whipped...");
+		    --_numWhips;
+			trace(name + " health: " + _numWhips + " / " + _maxWhips);
+		}
+		
+		public function isDead():Boolean {
+		    
+		    if (_numWhips <= 0) {
+		        return true;
+		    }
+		    return false;
 		}
 	}
 }
