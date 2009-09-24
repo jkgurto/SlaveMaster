@@ -1,91 +1,109 @@
 ﻿package library.objects {
-	import flash.display.*;
-	import flash.events.*;
+    
+	//import flash.display.*;
+	//import flash.events.*;
 	//import library.objects.*;
 	
-	public class Slave extends flash.display.MovieClip {
-		// ------- Properties -------
-      	public var slaveName:String;
-		private var position:Position;
-		private var type:String; //type descriptor of slave
-		private var numWhips:int; //number of times whipped
-		private var maxWhips:int; //maximum number of whips
-		private var thirst:int; //thirst as a percentage
-		private var morale:int; //percentage
-		private var emotion:String; //enum for emotion
-		private var output:int; //all factors considered what is the slaves output(contribution)
+	//import mx.core.SpriteAsset;
+	
+	import assets.Assets_slaveClass;
+	
+	public class Slave extends assets.Assets_slaveClass {
+	    
+	    // ------- Properties -------
+	    
+	    // Counts the number of slaves created.
+	    private static var slaveCount:uint = 0;
+	    
+		
+		private var _id:uint;
+      	
+      	// type descriptor of slave
+		private var _type:String;
+		
+		// number of times whipped
+		private var _numWhips:int;
+		
+		// maximum number of whips
+		private var _maxWhips:int;
+		
+		// thirst as a percentage
+		private var _thirst:int;
+		
+		// percentage
+		private var _morale:int;
+		
+		// enum for emotion
+		private var _emotion:String;
+		
+		//a ll factors considered what is the slaves output(contribution)
+		private var _output:int;
 			  
-		//constructor
-		public function Slave(initialName:String = "", initialPosition:Position = null, initialType:String = "") {
-			//TODO
+		// constructor
+		public function Slave() {
+		    ++slaveCount;
+		    
+		    _id = slaveCount;
+		    
+		    // name is inherited from sprite
+		    name = "Default slave";
 		}
 		
-		//GET FUNCTIONS
-		public function getPosition():Position {
-			//TODO
-			return null;
-		}
-		public function getEmotion():String {
-			//TODO
-			return null;
-		}
-		public function getMorale():int {
-			//TODO
-			return null;
-		}
-		public function getOutput():int {
-			//TODO
-			return null;
-		}
-		public function getNumWhips():int {
-			//TODO
-			return null;
-		}
-		public function getMaxWhips():int {
-			//TODO
-			return null;
-		}
-		public function getName():String {
-			//TODO
-			return null;
-		}
-		public function getType():String {
-			//TODO
-			return null;
-		}
-		public function getThirst():int {
-			//TODO
-			return null;
+		public function get id():uint {
+		    return _id;
 		}
 		
-		//SET FUNCTIONS
-		public function setPosition(myPosition:Position):void {
-			//TODO
-			return null;
+		public function get type():String {
+			return _type;
 		}
-		public function setEmotion(myEmotion:String):void {
-			//TODO
-			return null;
+		
+		public function get numWhips():int {
+			return _numWhips;
 		}
-		public function setMorale(myMorale:int):void {
-			//TODO
-			return null;
+		
+		public function set numWhips(myNumWhips:int):void {
+			_numWhips = myNumWhips;
 		}
-		public function setOutput(myOutput:int):void {
-			//TODO
-			return null;
+		
+		public function get maxWhips():int {
+			return _maxWhips;
 		}
-		public function setNumWhips(myNumWhips:int):void {
-			//TODO
-			return null;
+		
+		public function get thirst():int {
+			return _thirst;
 		}
+		
+		public function get morale():int {
+			return _morale;
+		}
+		
+		public function set morale(myMorale:int):void {
+			_morale = myMorale;
+		}
+		
+		public function get emotion():String {
+			return _emotion;
+		}
+		
+		public function set emotion(myEmotion:String):void {
+			_emotion = myEmotion;
+		}
+		
+		public function get output():int {
+			return _output;
+		}
+		
+		public function set output(myOutput:int):void {
+			_output = myOutput;
+		}
+		
 		/*
 			remove thirst by supplied amount
 			(slave automatically gets thirsty on its own)
 		*/
 		public function recoverThirst(myThirst:int):void {
 			//TODO
-			return null;
+			return;
 		}
 	}
 }
