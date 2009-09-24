@@ -6,7 +6,7 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 
-import library.objects.Slave;
+import game.library.objects.Slave;
 
 import mx.core.SpriteAsset;
 

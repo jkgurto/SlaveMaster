@@ -1,10 +1,4 @@
-﻿package library.objects {
-    
-	//import flash.display.*;
-	//import flash.events.*;
-	//import library.objects.*;
-	
-	//import mx.core.SpriteAsset;
+package game.library.objects {
 	
 	import assets.Assets_slaveClass;
 	
@@ -17,27 +11,16 @@
 	    
 		
 		private var _id:uint;
-      	
-      	// type descriptor of slave
-		private var _type:String;
-		
-		// number of times whipped
-		private var _numWhips:int;
-		
-		// maximum number of whips
-		private var _maxWhips:int;
-		
-		// thirst as a percentage
-		private var _thirst:int;
-		
-		// percentage
-		private var _morale:int;
-		
-		// enum for emotion
-		private var _emotion:String;
-		
-		//a ll factors considered what is the slaves output(contribution)
-		private var _output:int;
+		private var _type:String;    // type descriptor of slave
+		private var _numWhips:int;   // number of times whipped
+		private var _maxWhips:int;   // maximum number of whips
+		private var _thirst:int;     // thirst as a percentage
+		private var _morale:int;     // percentage
+		private var _emotion:String; // enum for emotion
+		private var _output:int;     // all factors considered what is the 
+		                             // slaves output(contribution)
+		private var _speed:int;       //in milliseconds per frame
+		private var myHands:Hands;
 			  
 		// constructor
 		public function Slave() {
@@ -46,7 +29,17 @@
 		    _id = slaveCount;
 		    
 		    // name is inherited from sprite
+		    // position is also inherited
 		    name = "Default slave";
+		    
+		    myHands = new Hands();
+			myHands.x = -68.3;
+			myHands.y = -17.3;
+			myHands.scaleX = 0.436;
+			myHands.scaleY = 0.489;
+			myHands.rotation = 8.5;
+			this.addChild(myHands);
+			this.setChildIndex(myHands, 0);
 		}
 		
 		public function get id():uint {
@@ -97,13 +90,21 @@
 			_output = myOutput;
 		}
 		
-		/*
-			remove thirst by supplied amount
-			(slave automatically gets thirsty on its own)
-		*/
+		public function get speed():int {
+			return _speed;
+		}
+		
+		public function set speed(mySpeed:int):void {
+			_speed = mySpeed;
+			myHands.speed = this.speed;
+		}
+		
 		public function recoverThirst(myThirst:int):void {
-			//TODO
 			return;
+		}
+		
+		public function doWhip():void {
+			trace("ouch! i got whipped...");
 		}
 	}
 }
