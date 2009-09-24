@@ -1,4 +1,4 @@
-﻿package library.objects {
+﻿package game.library.objects {
 	import flash.display.*;
 	import flash.events.*;
 	//import library.objects.*;
@@ -26,7 +26,7 @@
 		}
 		
 		public function getNumSlaves():int {
-			return 0;
+			return 5;
 		}
 		
 		//get total distance to finish level
@@ -36,7 +36,7 @@
 		
 		//returns total time allocated for level in seconds
 		public function getTimeLimit():int {
-			return 0;
+			return 180;
 		}
 		
 		/* optional implementation
