@@ -10,6 +10,7 @@ import game.library.objects.Slave;
 import game.library.objects.SlaveMaster;
 
 import mx.core.Application;
+import mx.core.UIComponent;
 import mx.core.SpriteAsset;
 
 // -- Variables
@@ -52,8 +53,6 @@ protected function enterPlayState(event:Event):void {
         difficulty = new Difficulty(boat);
         
         // -- Slaves
-        slaveCount = difficulty.numSlaves; // 4
-        
         const SLAVE_SCALE:Number = 0.2;
         const START:Point = new Point(200, 100);
         const ROW_WIDTH:Number = 250;
@@ -110,12 +109,6 @@ protected function enterPlayState(event:Event):void {
         
         slave4.addEventListener(MouseEvent.CLICK, slave4Click);
         
-        // Add to boat
-        boat.addItem(slave1);
-        boat.addItem(slave2);
-        boat.addItem(slave3);
-        boat.addItem(slave4);
-        
         // -- Slave Master
         slaveMaster = new SlaveMaster();
         slaveMaster.scaleX = SLAVE_SCALE;
@@ -129,12 +122,12 @@ protected function enterPlayState(event:Event):void {
     stage.addChild(difficulty.distanceLeftText);
     stage.addChild(difficulty.timeLeftText);
     
-    stage.addChild(boat);
-    stage.addChild(slave1);
-    stage.addChild(slave2);
-    stage.addChild(slave3);
-    stage.addChild(slave4);
-    stage.addChild(slaveMaster);
+    addChildSprite(boat);
+    addChildSlave(slave1);
+    addChildSlave(slave2);
+    addChildSlave(slave3);
+    addChildSlave(slave4);
+    addChildSprite(slaveMaster);
     
     // -- Start listening to keyboard
     stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
@@ -147,22 +140,22 @@ protected function exitPlayState(event:Event):void {
     
     stage.removeChild(difficulty.distanceLeftText);
     stage.removeChild(difficulty.timeLeftText);
-    stage.removeChild(boat);
-    stage.removeChild(slaveMaster);
+    removeChildSprite(boat);
+    removeChildSprite(slaveMaster);
     
     // Important - need to check if slaves are children of the stage before
     // attempting to remove them
-    if (slave1.parent != null) {
-        stage.removeChild(slave1);
+    if (slave1.parent.parent != null) {
+        removeChildSlave(slave1);
     }
-    if (slave2.parent != null) {
-        stage.removeChild(slave2);
+    if (slave2.parent.parent != null) {
+        removeChildSlave(slave2);
     }
-    if (slave3.parent != null) {
-        stage.removeChild(slave3);
+    if (slave3.parent.parent != null) {
+        removeChildSlave(slave3);
     }
-    if (slave4.parent != null) {
-        stage.removeChild(slave4);
+    if (slave4.parent.parent != null) {
+        removeChildSlave(slave4);
     }
     
     // -- Stop timer
@@ -192,9 +185,7 @@ protected function slave1Click(event:MouseEvent):void {
     
     if (slave1.isDead()) {
         
-        boat.removeItem(slave1);
-        stage.removeChild(slave1);
-        --slaveCount;
+        removeChildSlave(slave1);
         
         if (slaveCount <= 0) {
             setCurrentState("GameOverState");
@@ -209,9 +200,7 @@ protected function slave2Click(event:MouseEvent):void {
     
     if (slave2.isDead()) {
         
-        boat.removeItem(slave2);
-        stage.removeChild(slave2);
-        --slaveCount;
+        removeChildSlave(slave2);
         
         if (slaveCount <= 0) {
             setCurrentState("GameOverState");
@@ -226,9 +215,7 @@ protected function slave3Click(event:MouseEvent):void {
     
     if (slave3.isDead()) {
         
-        boat.removeItem(slave3);
-        stage.removeChild(slave3);
-        --slaveCount;
+        removeChildSlave(slave3);
         
         if (slaveCount <= 0) {
             setCurrentState("GameOverState");
@@ -243,14 +230,41 @@ protected function slave4Click(event:MouseEvent):void {
     
     if (slave4.isDead()) {
         
-        boat.removeItem(slave4);
-        stage.removeChild(slave4);
-        --slaveCount;
+        removeChildSlave(slave4);
         
         if (slaveCount <= 0) {
             setCurrentState("GameOverState");
         }
     }
+}
+
+protected function addChildSprite(sprite:Sprite):void {
+
+    var component:UIComponent = new UIComponent();
+    component.addChild(sprite);
+    canvas.addChild(component);
+}
+
+protected function removeChildSprite(sprite:Sprite):void {
+    
+    canvas.removeChild(sprite.parent);
+}
+
+protected function addChildSlave(slave:Slave):void {
+    
+    boat.addItem(slave);
+    var component:UIComponent = new UIComponent();
+    component.addChild(slave);
+    component.addChild(slave.progress);
+    canvas.addChild(component);
+    ++slaveCount;
+}
+
+protected function removeChildSlave(slave:Slave):void {
+    
+    boat.removeItem(slave);
+    canvas.removeChild(slave.parent);
+    --slaveCount;
 }
 
 override protected function keyDownHandler(event:KeyboardEvent):void {

@@ -2,11 +2,16 @@ package game.library.objects {
 	
 	import assets.Assets_slaveClass;
 	
+	import mx.controls.ProgressBar;
+	
+	import mx.core.Application;
+	
 	public class Slave extends assets.Assets_slaveClass {
 	    
 	    // ------- Properties -------
 	    public static const DEFAULT_MAX_WHIPS:int = 10;
 	    public static const DEFAULT_OUTPUT:int = 1;
+	    public static const DEFAULT_PROGRESS_WIDTH:int = 50;
 	    
 	    
 	    // Counts the number of slaves created.
@@ -28,6 +33,8 @@ package game.library.objects {
 		                             // slaves output(contribution)
 		private var _speed:int;       //in milliseconds per frame
 		private var myHands:Hands;
+		
+		private var _progress:ProgressBar;
 			  
 		// constructor
 		public function Slave() {
@@ -49,6 +56,30 @@ package game.library.objects {
 			myHands.rotation = 8.5;
 			this.addChild(myHands);
 			this.setChildIndex(myHands, 0);
+			
+			_progress = new ProgressBar();
+			_progress.visible = true;
+			_progress.label = "";
+			_progress.direction = "right";
+			_progress.mode = "manual";
+			
+            _progress.width = DEFAULT_PROGRESS_WIDTH;
+            _progress.x = this.x;
+            _progress.y = this.y;
+            
+            _progress.minimum = 0;
+            //progress.maximum = _maxWhips;
+            _progress.setProgress( (_maxWhips - _numWhips), _maxWhips );
+		}
+		
+		override public function set x(value:Number):void {
+		    super.x = value;
+		    _progress.x = value;
+		}
+		
+		override public function set y(value:Number):void {
+		    super.y = value;
+		    _progress.y = value;
 		}
 		
 		public function get id():uint {
@@ -112,9 +143,15 @@ package game.library.objects {
 			return;
 		}
 		
+		public function get progress():ProgressBar {
+			return _progress;
+		}
+		
 		public function doWhip():void {
 		    --_numWhips;
 			trace(name + " health: " + _numWhips + " / " + _maxWhips);
+			
+			_progress.setProgress( (_maxWhips - _numWhips), _maxWhips );
 		}
 		
 		public function isDead():Boolean {
