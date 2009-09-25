@@ -7,6 +7,7 @@
     import flash.utils.Timer;
     
     import game.library.objects.Boat;
+    import game.library.objects.Tree;
     
     import mx.core.Application;
 	
@@ -36,6 +37,7 @@
         private var _distance:int;
 		
 		private var boat:Boat;
+		public var tree:Tree;
 		
 		public function Difficulty(myBoat:Boat, initialLevel:int = 1) {
 		    
@@ -43,6 +45,8 @@
 		    level = initialLevel;
 		    _numSlaves = MAX_SLAVES;
 		    _distance = MAX_DISTANCE;
+		    
+		    tree = new Tree();
 		    
 		    // -- Format
 		    var format:TextFormat = new TextFormat();
@@ -117,6 +121,8 @@
             // -- Distance
             _distance -= boat.speed;
             _distanceLeftText.text = "Distance: " + _distance;
+            
+            tree.distance -= boat.speed;
             
             // Distance finished
             if (_distance <= 0) {

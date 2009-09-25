@@ -121,6 +121,7 @@ protected function enterPlayState(event:Event):void {
     // Add scene to stage
     stage.addChild(difficulty.distanceLeftText);
     stage.addChild(difficulty.timeLeftText);
+    stage.addChild(difficulty.tree);
     
     addChildSprite(boat);
     addChildSlave(slave1);
