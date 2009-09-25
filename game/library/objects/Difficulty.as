@@ -7,7 +7,6 @@
     import flash.utils.Timer;
     
     import game.library.objects.Boat;
-    import game.library.objects.Tree;
     
     import mx.core.Application;
 	
@@ -23,7 +22,7 @@
 		public const TICK_INTERVAL:int = 1000; // Seconds
 		
 		public const MAX_SLAVES:int = 4;
-		public const MAX_DISTANCE:int = 100;
+		public const MAX_DISTANCE:int = 1000;
 		
 		public const TEXT_SPACER:int = 20;
 		
@@ -37,7 +36,6 @@
         private var _distance:int;
 		
 		private var boat:Boat;
-		public var tree:Tree;
 		
 		public function Difficulty(myBoat:Boat, initialLevel:int = 1) {
 		    
@@ -45,8 +43,6 @@
 		    level = initialLevel;
 		    _numSlaves = MAX_SLAVES;
 		    _distance = MAX_DISTANCE;
-		    
-		    tree = new Tree();
 		    
 		    // -- Format
 		    var format:TextFormat = new TextFormat();
@@ -93,6 +89,11 @@
 			return _distance;
 		}
 		
+		public function set distance(value:int):void {
+			_distance = value;
+			_distanceLeftText.text = "Distance: " + _distance;
+		}
+		
 		/* optional implementation
 		public function getNumObstacles():int {
 			
@@ -118,16 +119,16 @@
             _timeLeftText.text =
                 "Time: " + (MAX_TIME - event.target.currentCount);
             
+            /*
             // -- Distance
             _distance -= boat.speed;
             _distanceLeftText.text = "Distance: " + _distance;
-            
-            tree.distance -= boat.speed;
             
             // Distance finished
             if (_distance <= 0) {
                 Application.application.setCurrentState("GameOverState");
             }
+            */
         }
         
         private function onTimerComplete(event:TimerEvent):void

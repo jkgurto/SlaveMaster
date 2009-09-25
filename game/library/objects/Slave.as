@@ -29,9 +29,9 @@ package game.library.objects {
 		private var _thirst:int;     // thirst as a percentage
 		private var _morale:int;     // percentage
 		private var _emotion:String; // enum for emotion
-		private var _output:int;     // all factors considered what is the 
+		private var _output:Number;  // all factors considered what is the 
 		                             // slaves output(contribution)
-		private var _speed:int;       //in milliseconds per frame
+		private var _speed:int;      //in milliseconds per frame
 		private var myHands:Hands;
 		
 		private var _progress:ProgressBar;
@@ -122,11 +122,11 @@ package game.library.objects {
 			_emotion = myEmotion;
 		}
 		
-		public function get output():int {
+		public function get output():Number {
 			return _output;
 		}
 		
-		public function set output(myOutput:int):void {
+		public function set output(myOutput:Number):void {
 			_output = myOutput;
 		}
 		

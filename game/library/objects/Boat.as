@@ -35,9 +35,9 @@ package game.library.objects {
             }
         }
         
-        public function get speed():int {
+        public function get speed():Number {
             
-            var speed:int = 0;
+            var speed:Number = 0;
             
             for each (var slave:Slave in store) {
                 

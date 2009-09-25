@@ -8,6 +8,7 @@ import game.library.objects.Boat;
 import game.library.objects.Difficulty;
 import game.library.objects.Slave;
 import game.library.objects.SlaveMaster;
+import game.library.objects.Tree;
 
 import mx.core.Application;
 import mx.core.UIComponent;
@@ -23,12 +24,25 @@ protected var slaveMaster:SlaveMaster = null;
 
 protected var difficulty:Difficulty = null;
 
+public var tree:Tree = null;
+
 protected var reset:Boolean = true;
 protected var slaveCount:int = 0;
 
 // -- Methods
 protected function enterFrame(event:Event):void {
     
+    if (currentState.toString() == "PlayState") {
+        tree.distance -= (boat.speed / stage.frameRate);
+        
+        // -- Distance
+        difficulty.distance -= (boat.speed / stage.frameRate);
+        
+        // Distance finished
+        if (difficulty.distance <= 0) {
+            Application.application.setCurrentState("GameOverState");
+        }
+    }
 }
 
 protected function enterStartState(event:Event):void {
@@ -45,6 +59,9 @@ protected function enterPlayState(event:Event):void {
     if (reset) {
         
         reset = false;
+        
+        // -- Tree
+        tree = new Tree();
         
         // -- Boat
         boat = new Boat();
@@ -121,8 +138,8 @@ protected function enterPlayState(event:Event):void {
     // Add scene to stage
     stage.addChild(difficulty.distanceLeftText);
     stage.addChild(difficulty.timeLeftText);
-    stage.addChild(difficulty.tree);
     
+    addChildSprite(tree);
     addChildSprite(boat);
     addChildSlave(slave1);
     addChildSlave(slave2);
@@ -141,6 +158,7 @@ protected function exitPlayState(event:Event):void {
     
     stage.removeChild(difficulty.distanceLeftText);
     stage.removeChild(difficulty.timeLeftText);
+    removeChildSprite(tree);
     removeChildSprite(boat);
     removeChildSprite(slaveMaster);
     
