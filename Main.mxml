@@ -21,7 +21,13 @@
             exitState="exitStartState(event)"
             >
             <mx:AddChild relativeTo="{canvas}" position="lastChild">
-                <mx:Button x="309" y="206" label="Start" id="startButton" click="startButtonClicked(event)"/>
+                <mx:Button x="372.5" y="266" label="Start" id="startButton" click="startButtonClicked(event)"/>
+            </mx:AddChild>
+            <mx:AddChild relativeTo="{canvas}" position="lastChild">
+                <mx:Button x="374.5" y="321" label="Help" click="helpButtonClicked(event)" id="helpButton"/>
+            </mx:AddChild>
+            <mx:AddChild relativeTo="{canvas}" position="lastChild">
+                <mx:Label x="299" y="163" text="Slave Master" fontSize="30" fontWeight="normal"/>
             </mx:AddChild>
         </mx:State>
     
@@ -38,7 +44,13 @@
             exitState="exitPausedState(event)"
             >
             <mx:AddChild relativeTo="{canvas}" position="lastChild">
-                <mx:Button x="367" y="201" label="Continue" id="continueButton" click="continueButtonClicked(event)"/>
+                <mx:Button x="362" y="331.3" label="Continue" id="continueButton" click="continueButtonClicked(event)"/>
+            </mx:AddChild>
+            <mx:AddChild relativeTo="{canvas}" position="lastChild">
+                <mx:Label x="343.5" y="160.15" text="Paused" fontSize="30" id="pausedText"/>
+            </mx:AddChild>
+            <mx:AddChild relativeTo="{canvas}" position="lastChild">
+                <mx:Text x="386" y="243" text="..." id="pausedInfoText"/>
             </mx:AddChild>
         </mx:State>
             
@@ -48,7 +60,22 @@
             exitState="exitGameOverState(event)"
             >
             <mx:AddChild relativeTo="{canvas}" position="lastChild">
-                <mx:Button x="287" y="183" label="Play Again" id="playAgainButton" click="playAgainButtonClicked(event)"/>
+                <mx:Button x="356.45" y="295.15" label="Play Again" id="playAgainButton" click="playAgainButtonClicked(event)"/>
+            </mx:AddChild>
+            <mx:AddChild relativeTo="{canvas}" position="lastChild">
+                <mx:Text x="390.5" y="237.45" text="..." id="gameOverInfoText"/>
+            </mx:AddChild>
+        </mx:State>
+        <mx:State
+            name="HelpState"
+            enterState="enterHelpState(event)"
+            exitState="exitHelpState(event)"
+            >
+            <mx:AddChild relativeTo="{canvas}" position="lastChild">
+                <mx:Text x="327" y="173" text="Click slaves to whip them, z key left beat, x key right beat" id="helpText"/>
+            </mx:AddChild>
+            <mx:AddChild relativeTo="{canvas}" position="lastChild">
+                <mx:Button x="367" y="234" label="Back" id="helpBackButton" click="helpBackButtonClicked(event)"/>
             </mx:AddChild>
         </mx:State>
 

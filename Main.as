@@ -6,9 +6,12 @@ import flash.geom.Point;
 
 import game.library.objects.Boat;
 import game.library.objects.Difficulty;
+import game.library.objects.Drum;
+import game.library.objects.Environment;
 import game.library.objects.Slave;
 import game.library.objects.SlaveMaster;
-import game.library.objects.Tree;
+
+import mx.collections.ArrayCollection;
 
 import mx.core.Application;
 import mx.core.UIComponent;
@@ -16,6 +19,8 @@ import mx.core.SpriteAsset;
 
 // -- Variables
 protected var boat:Boat = null;
+protected var drum:Drum = null;
+protected var environment:Environment = null;
 protected var slave1:Slave = null;
 protected var slave2:Slave = null;
 protected var slave3:Slave = null;
@@ -24,8 +29,6 @@ protected var slaveMaster:SlaveMaster = null;
 
 protected var difficulty:Difficulty = null;
 
-public var tree:Tree = null;
-
 protected var reset:Boolean = true;
 protected var slaveCount:int = 0;
 
@@ -33,9 +36,14 @@ protected var slaveCount:int = 0;
 protected function enterFrame(event:Event):void {
     
     if (currentState.toString() == "PlayState") {
-        tree.distance -= (boat.speed / stage.frameRate);
         
-        // -- Distance
+        // -- Environment
+        environment.update(boat.speed, stage.frameRate);
+        
+        // -- Drum
+        drum.update(stage.frameRate);
+        
+        // -- Distance to goal
         difficulty.distance -= (boat.speed / stage.frameRate);
         
         // Distance finished
@@ -53,6 +61,14 @@ protected function exitStartState(event:Event):void {
     
 }
 
+protected function enterHelpState(event:Event):void {
+    
+}
+
+protected function exitHelpState(event:Event):void {
+    
+}
+
 protected function enterPlayState(event:Event):void {
     
     // -- Reset scene
@@ -60,14 +76,14 @@ protected function enterPlayState(event:Event):void {
         
         reset = false;
         
-        // -- Tree
-        tree = new Tree();
-        
         // -- Boat
         boat = new Boat();
         
         // -- Difficulty
         difficulty = new Difficulty(boat);
+        
+        // -- Environment
+        environment = new Environment();
         
         // -- Slaves
         const SLAVE_SCALE:Number = 0.2;
@@ -133,19 +149,28 @@ protected function enterPlayState(event:Event):void {
         
         slaveMaster.x += START.x + ROW_WIDTH;
         slaveMaster.y += START.y + slave2.height + slave4.height;
+        
+        // -- Drum
+        drum = new Drum();
+        drum.x = slaveMaster.x;
+        drum.y = slaveMaster.y - slaveMaster.height + drum.height;
+        drum.scaleX = SLAVE_SCALE;
+        drum.scaleY = SLAVE_SCALE;
     }
     
-    // Add scene to stage
+    // -- Add scene to stage
     stage.addChild(difficulty.distanceLeftText);
     stage.addChild(difficulty.timeLeftText);
     
-    addChildSprite(tree);
+    // Layered in order
+    addChildEnvironment(environment);
     addChildSprite(boat);
     addChildSlave(slave1);
     addChildSlave(slave2);
     addChildSlave(slave3);
     addChildSlave(slave4);
     addChildSprite(slaveMaster);
+    addChildSprite(drum);
     
     // -- Start listening to keyboard
     stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
@@ -158,9 +183,10 @@ protected function exitPlayState(event:Event):void {
     
     stage.removeChild(difficulty.distanceLeftText);
     stage.removeChild(difficulty.timeLeftText);
-    removeChildSprite(tree);
+    removeChildEnvironment(environment);
     removeChildSprite(boat);
     removeChildSprite(slaveMaster);
+    removeChildSprite(drum);
     
     // Important - need to check if slaves are children of the stage before
     // attempting to remove them
@@ -182,7 +208,7 @@ protected function exitPlayState(event:Event):void {
 }
 
 protected function enterPausedState(event:Event):void {
-    
+    pausedInfoText.text = "Level " + difficulty.level;
 }
 
 protected function exitPausedState(event:Event):void {
@@ -191,6 +217,13 @@ protected function exitPausedState(event:Event):void {
 
 protected function enterGameOverState(event:Event):void {
     reset = true;
+    
+    if (difficulty.distance <= 0) {
+        gameOverInfoText.text = "Win";
+    }
+    else {
+        gameOverInfoText.text = "Lose";
+    }
 }
 
 protected function exitGameOverState(event:Event):void {
@@ -199,7 +232,7 @@ protected function exitGameOverState(event:Event):void {
 
 protected function slave1Click(event:MouseEvent):void {
     
-    slaveMaster.doWhip(slave1);
+    slaveMaster.doWhip(slave1, event.stageX, event.stageY);
     slave1.doWhip();
     
     if (slave1.isDead()) {
@@ -214,7 +247,7 @@ protected function slave1Click(event:MouseEvent):void {
 
 protected function slave2Click(event:MouseEvent):void {
     
-    slaveMaster.doWhip(slave2);
+    slaveMaster.doWhip(slave2, event.stageX, event.stageY);
     slave2.doWhip();
     
     if (slave2.isDead()) {
@@ -229,7 +262,7 @@ protected function slave2Click(event:MouseEvent):void {
 
 protected function slave3Click(event:MouseEvent):void {
     
-    slaveMaster.doWhip(slave3);
+    slaveMaster.doWhip(slave3, event.stageX, event.stageY);
     slave3.doWhip();
     
     if (slave3.isDead()) {
@@ -244,7 +277,7 @@ protected function slave3Click(event:MouseEvent):void {
 
 protected function slave4Click(event:MouseEvent):void {
     
-    slaveMaster.doWhip(slave4);
+    slaveMaster.doWhip(slave4, event.stageX, event.stageY);
     slave4.doWhip();
     
     if (slave4.isDead()) {
@@ -254,6 +287,27 @@ protected function slave4Click(event:MouseEvent):void {
         if (slaveCount <= 0) {
             setCurrentState("GameOverState");
         }
+    }
+}
+
+protected function addChildEnvironment(environment:Environment):void {
+
+    var component:UIComponent;
+    var collection:ArrayCollection = environment.sprites;
+    
+    for each (var sprite:Sprite in collection) {
+        component = new UIComponent();
+        component.addChild(sprite);
+        canvas.addChild(component);
+    }
+}
+
+protected function removeChildEnvironment(environment:Environment):void {
+    
+    var collection:ArrayCollection = environment.sprites;
+    
+    for each (var sprite:Sprite in collection) {
+        canvas.removeChild(sprite.parent);
     }
 }
 
@@ -294,16 +348,31 @@ override protected function keyDownHandler(event:KeyboardEvent):void {
     else if (String.fromCharCode(event.charCode) == "p") {
         setCurrentState("PausedState");
     }
-}
-
-protected function startButtonClicked(event:MouseEvent):void {
-    setCurrentState("PlayState");
+    else if (String.fromCharCode(event.charCode) == "z") {
+        drum.doLeftBeat();
+    }
+    else if (String.fromCharCode(event.charCode) == "x") {
+        drum.doRightBeat();
+    }
+    
 }
 
 protected function continueButtonClicked(event:MouseEvent):void {
     setCurrentState("PlayState");
 }
 
+protected function helpButtonClicked(event:MouseEvent):void {
+    setCurrentState("HelpState");
+}
+
+protected function helpBackButtonClicked(event:MouseEvent):void {
+    setCurrentState("StartState");
+}
+
 protected function playAgainButtonClicked(event:MouseEvent):void {
     setCurrentState("StartState");
+}
+
+protected function startButtonClicked(event:MouseEvent):void {
+    setCurrentState("PlayState");
 }

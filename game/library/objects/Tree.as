@@ -16,7 +16,7 @@ package game.library.objects {
         
         public static const START_SCALE:Point = new Point(0.1, 0.1);
         
-        public static const HORIZON_DISTANCE:Number = 20;
+        public static const HORIZON_DISTANCE:Number = 50;
         
         public static const HORIZON_START:Point
             = new Point(Application.application.width / 3.0, 0);

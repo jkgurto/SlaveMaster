@@ -31,7 +31,7 @@
 		private var _timeLeftText:TextField = null;
         private var _timer:Timer = null;
         
-        private var level:int;
+        private var _level:int;
         private var _numSlaves:int;
         private var _distance:int;
 		
@@ -40,7 +40,7 @@
 		public function Difficulty(myBoat:Boat, initialLevel:int = 1) {
 		    
 		    boat = myBoat;
-		    level = initialLevel;
+		    _level = initialLevel;
 		    _numSlaves = MAX_SLAVES;
 		    _distance = MAX_DISTANCE;
 		    
@@ -79,6 +79,14 @@
                 - (_timeLeftText.width + TEXT_SPACER);
                 
             _timeLeftText.y = _distanceLeftText.height + (TEXT_SPACER * 2);
+		}
+		
+		public function get level():int {
+			return _level;
+		}
+		
+		public function set level(value:int):void {
+			_level = value;
 		}
 		
 		public function get numSlaves():int {
