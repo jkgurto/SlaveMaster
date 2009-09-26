@@ -1,12 +1,17 @@
 ﻿package game.library.objects {
     
-    import assets.Assets_drumClass;
-    import assets.Assets_drumSoundClass;
+    import assets.Assets;
+    
+    import flash.display.Sprite;
+    import flash.events.TimerEvent;
+    import flash.utils.Timer;
 	
-	public class Drum extends assets.Assets_drumClass {
+	public class Drum extends Sprite implements Pauseable {
 	    
 	    public static var sound:assets.Assets_drumSoundClass =
 	        new assets.Assets_drumSoundClass();
+	        
+	    public static const MIN_ROW_INTERVAL_S:Number = 3;
 	    
 	    public static const MAX_CORRECT:Number = 100;
 	    public static const MIN_CORRECT:Number = 0;
@@ -27,12 +32,22 @@
 		// Low = bad, High = good
 		private var correctness:Number = MIN_CORRECT;
 		
+		private var _rowTimer:Timer = new Timer(MIN_ROW_INTERVAL_S * 1000, 0);
+		private var _rowTime:Boolean = false;
+		private var paused:Boolean = false;
+		
+		// Drum image
+		private var drumImage:Sprite = new assets.Assets_drumClass();
+		
 		/**
 		 * TODO Timing stuff
 		 * Needs some tweaking.
 		 */
 		public function Drum() {
+			this.addChild(drumImage);
 			
+			_rowTimer.addEventListener(TimerEvent.TIMER, onTick);
+			_rowTimer.start();
 		}
 		
 		public function update(frameRate:Number):void {
@@ -118,6 +133,28 @@
 			leftLastBeat = false;		
 		}
 		
+		public function get rowTime():Boolean {
+		    var tmp:Boolean = _rowTime;
+		    _rowTime = false;
+		    return tmp;
+		}
+		
+		public function pause():void {
+		    
+		    if (_rowTimer.running) {
+    		    paused = true;
+    		    _rowTimer.stop();
+		    }
+		}
+		
+        public function resume():void {
+            
+            if (paused) {
+                paused = false;
+                _rowTimer.start();
+            }
+        }
+		
 		/*
 			hit a beat on the drum, record beats within the object and link to timer
 		*/
@@ -130,5 +167,9 @@
 			return 100;
 		}
 		
+		private function onTick(event:TimerEvent):void 
+        {
+            _rowTime = true;
+        }
 	}
 }

@@ -1,6 +1,6 @@
 package game.library.objects {
     
-    import assets.Assets_treeClass;
+    import assets.Assets;
     
     import flash.geom.Point;
     
@@ -26,8 +26,10 @@ package game.library.objects {
         
         private var _distance:Number;
         
+        private var treeImage:Sprite = new assets.Assets_treeClass();
+        
         public function Tree() {
-            
+            this.addChild(treeImage);
             reset();
         }
         

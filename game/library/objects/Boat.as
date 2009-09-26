@@ -1,16 +1,20 @@
 package game.library.objects {
     
-    import assets.Assets_boatClass;
+    import assets.Assets;
+    
+    import flash.display.Sprite;
     
     import game.library.objects.Slave;
     
     import mx.collections.ArrayCollection;
     
-    public class Boat extends assets.Assets_boatClass {
+    public class Boat extends Sprite {
         
         private var store:ArrayCollection = new ArrayCollection();
+        private var boatImage:Sprite = new assets.Assets_boatClass();
         
         public function Boat() {
+            this.addChild(boatImage);
         }
         
         public function addItem(slave:Slave):void {

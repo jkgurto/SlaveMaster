@@ -17,31 +17,29 @@ package game.library.objects {
      */
     public class Environment extends Sprite {
         
-        public const BACKGROUND_SCALE:Number = 1.0;
+        public static const BACKGROUND_SCALE:Number = 1.0;
         
-        public const NUM_WAVES:Number = 5;
-        public const WAVE_SCALE:Number = 1.0;
-        public const WAVE_START_Y:Number = 200;
-        public const WAVE_DISTANCE:Number =
+        public static const NUM_WAVES:Number = 5;
+        public static const WAVE_SCALE:Number = 1.0;
+        public static const WAVE_START_Y:Number = 200;
+        public static const WAVE_DISTANCE:Number =
             (Application.application.height - WAVE_START_Y) / NUM_WAVES;
             
             
-        public const MIN_SKY_Y:Number = -50;
-        public const MAX_SKY_Y:Number = 100;
+        public static const MIN_SKY_Y:Number = -50;
+        public static const MAX_SKY_Y:Number = 100;
         
-        public const SUN_SCALE:Number = 0.2;
+        public static const SUN_SCALE:Number = 0.2;
         
-        public const NUM_CLOUDS:Number = 5;
-        public const CLOUD_SCALE:Number = 0.2;
-        public const MIN_CLOUD_SPEED_X:Number = 5;
-        public const MAX_CLOUD_SPEED_X:Number = 20;
+        public static const NUM_CLOUDS:Number = 5;
+        public static const CLOUD_SCALE:Number = 0.2;
+        public static const MIN_CLOUD_SPEED_X:Number = 5;
+        public static const MAX_CLOUD_SPEED_X:Number = 20;
         
         // These sprites are single sprites
-        private const background:assets.Assets_backgroundClass =
-            new assets.Assets_backgroundClass();
+        private const background:Sprite = new assets.Assets_backgroundClass();
             
-        private const sun:assets.Assets_sunClass =
-            new assets.Assets_sunClass();
+        private const sun:Sprite = new assets.Assets_sunClass();
         
         // These sprites are groups of more sprites
         private var waves:Sprite = new Sprite();

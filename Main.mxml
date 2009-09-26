@@ -25,10 +25,13 @@
                 <mx:Button x="372.5" y="266" label="Start" id="startButton" click="startButtonClicked(event)"/>
             </mx:AddChild>
             <mx:AddChild relativeTo="{canvas}" position="lastChild">
-                <mx:Button x="374.5" y="321" label="Help" click="helpButtonClicked(event)" id="helpButton"/>
+                <mx:Button x="374.5" y="326" label="Help" click="helpButtonClicked(event)" id="helpButton"/>
             </mx:AddChild>
             <mx:AddChild relativeTo="{canvas}" position="lastChild">
-                <mx:Label x="299" y="163" text="Slave Master" fontSize="30" fontWeight="normal"/>
+                <mx:Label x="299" y="216" text="Slave Master" fontSize="30" fontWeight="normal" id="label1"/>
+            </mx:AddChild>
+            <mx:AddChild relativeTo="{label1}" position="before">
+                <mx:Button x="367" y="296" label="Credits" click="creditsButtonClicked(event)" id="creditsButton"/>
             </mx:AddChild>
         </mx:State>
     
@@ -73,10 +76,22 @@
             exitState="exitHelpState(event)"
             >
             <mx:AddChild relativeTo="{canvas}" position="lastChild">
-                <mx:Text x="327" y="173" text="Click slaves to whip them, z key left beat, x key right beat" id="helpText"/>
+                <mx:Text x="200" y="168" text="{HELP_STRING}" id="helpText" textAlign="center" width="400" height="200" fontSize="12"/>
             </mx:AddChild>
             <mx:AddChild relativeTo="{canvas}" position="lastChild">
-                <mx:Button x="367" y="234" label="Back" id="helpBackButton" click="helpBackButtonClicked(event)"/>
+                <mx:Button x="373" y="426" label="Back" id="helpBackButton" click="helpBackButtonClicked(event)"/>
+            </mx:AddChild>
+        </mx:State>
+        <mx:State
+            name="CreditsState"
+            enterState="enterCreditsState(event)"
+            exitState="exitCreditsState(event)"
+            >
+            <mx:AddChild relativeTo="{canvas}" position="lastChild">
+                <mx:Button x="373" y="426" label="Back" id="creditsBackButton" click="creditsBackButtonClicked(event)"/>
+            </mx:AddChild>
+            <mx:AddChild relativeTo="{canvas}" position="lastChild">
+                <mx:Text x="227.5" y="182" text="{CREDITS_STRING}" id="creditsText" fontSize="12" height="197" width="345" textAlign="center"/>
             </mx:AddChild>
         </mx:State>
 
@@ -95,6 +110,11 @@
 
     <mx:Script
         source="Main.as"
+        >
+    </mx:Script>
+    
+    <mx:Script
+        source="Text.as"
         >
     </mx:Script>
     

@@ -1,9 +1,9 @@
 package game.library.objects {
     
-    import mx.core.SpriteAsset;
+    import flash.display.Sprite;
     
     // TODO Dummy hands class
-    public class Hands extends SpriteAsset {
+    public class Hands extends Sprite {
         
         private var _speed:int;
         

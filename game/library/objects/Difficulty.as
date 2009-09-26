@@ -16,13 +16,13 @@
 	 * Other solution is to hardcode a table in this class that stores all the
 	 * data required in terms of difficulty per level
 	 */
-	public class Difficulty {
+	public class Difficulty implements Pauseable {
 		
 		public const MAX_TIME:int = 180;       // Ticks
 		public const TICK_INTERVAL:int = 1000; // Seconds
 		
 		public const MAX_SLAVES:int = 4;
-		public const MAX_DISTANCE:int = 1000;
+		public const MAX_DISTANCE:int = 2000;
 		
 		public const TEXT_SPACER:int = 20;
 		
@@ -30,6 +30,7 @@
 		
 		private var _timeLeftText:TextField = null;
         private var _timer:Timer = null;
+        private var paused:Boolean = false;
         
         private var _level:int;
         private var _numSlaves:int;
@@ -71,6 +72,8 @@
             _timer = new Timer(TICK_INTERVAL, MAX_TIME);
             _timer.addEventListener(TimerEvent.TIMER, onTick);
             _timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
+            
+            _timer.start();
             
             // Top left of screen
             // Under distance
@@ -116,9 +119,21 @@
 		    return _timeLeftText;
 		}
 		
-		public function get timer():Timer {
-		    return _timer;
+		public function pause():void {
+		    
+		    if (_timer.running) {
+    		    paused = true;
+    		    _timer.stop();
+		    }
 		}
+		
+        public function resume():void {
+            
+            if (paused) {
+                paused = false;
+                _timer.start();
+            }
+        }
 		
 		private function onTick(event:TimerEvent):void 
         {

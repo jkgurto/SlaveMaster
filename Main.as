@@ -13,11 +13,15 @@ import game.library.objects.SlaveMaster;
 
 import mx.collections.ArrayCollection;
 
+import mx.controls.ProgressBar;
+
 import mx.core.Application;
 import mx.core.UIComponent;
 import mx.core.SpriteAsset;
 
 // -- Variables
+protected const SPEED_BAR_WIDTH:int = 100;
+
 protected var boat:Boat = null;
 protected var drum:Drum = null;
 protected var environment:Environment = null;
@@ -32,6 +36,8 @@ protected var difficulty:Difficulty = null;
 protected var reset:Boolean = true;
 protected var slaveCount:int = 0;
 
+private var speedBar:ProgressBar = null;
+
 // -- Methods
 protected function creationComplete(event:Event):void {
     
@@ -41,11 +47,28 @@ protected function enterFrame(event:Event):void {
     
     if (currentState.toString() == "PlayState") {
         
-        // -- Environment
-        environment.update(boat.speed, stage.frameRate);
+        // -- Slaves
+        slave1.update(stage.frameRate);
+        slave2.update(stage.frameRate);
+        slave3.update(stage.frameRate);
+        slave4.update(stage.frameRate);
         
         // -- Drum
         drum.update(stage.frameRate);
+        
+        if (drum.rowTime) {
+            slave1.doRow();
+            slave2.doRow();
+            slave3.doRow();
+            slave4.doRow();
+        }
+        
+        // -- Environment
+        environment.update(boat.speed, stage.frameRate);
+        
+        // -- Speed Bar
+        speedBar.setProgress(boat.speed,
+                             Slave.MAX_OUTPUT * slaveCount);
         
         // -- Distance to goal
         difficulty.distance -= (boat.speed / stage.frameRate);
@@ -70,6 +93,14 @@ protected function enterHelpState(event:Event):void {
 }
 
 protected function exitHelpState(event:Event):void {
+    
+}
+
+protected function enterCreditsState(event:Event):void {
+    
+}
+
+protected function exitCreditsState(event:Event):void {
     
 }
 
@@ -146,6 +177,26 @@ protected function enterPlayState(event:Event):void {
         
         slave4.addEventListener(MouseEvent.CLICK, slave4Click);
         
+        // -- Boat speed bar
+        speedBar = new ProgressBar();
+		speedBar.visible = true;
+		speedBar.label = "Speed";
+		speedBar.direction = "right";
+		speedBar.mode = "manual";
+        
+        speedBar.width = SPEED_BAR_WIDTH;
+        
+        speedBar.x = Application.application.width
+                     - (speedBar.width + 20);
+        speedBar.y = difficulty.timeLeftText.y
+                     + difficulty.timeLeftText.height
+                     + 20;
+        
+        speedBar.minimum = boat.speed;
+        speedBar.setProgress(boat.speed,
+                             Slave.MAX_OUTPUT * slaveCount);
+                             
+        
         // -- Slave Master
         slaveMaster = new SlaveMaster();
         slaveMaster.scaleX = SLAVE_SCALE;
@@ -163,9 +214,6 @@ protected function enterPlayState(event:Event):void {
     }
     
     // -- Add scene to stage
-    stage.addChild(difficulty.distanceLeftText);
-    stage.addChild(difficulty.timeLeftText);
-    
     // Layered in order
     addChildSprite(environment);
     addChildSprite(boat);
@@ -176,21 +224,29 @@ protected function enterPlayState(event:Event):void {
     addChildSprite(slaveMaster);
     addChildSprite(drum);
     
+    stage.addChild(difficulty.distanceLeftText);
+    stage.addChild(difficulty.timeLeftText);
+    
+    canvas.addChild(speedBar);
+    
     // -- Start listening to keyboard
     stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
     
     // -- Start timer
-    difficulty.timer.start();
+    resumeTimers();
 }
 
 protected function exitPlayState(event:Event):void {
     
-    stage.removeChild(difficulty.distanceLeftText);
-    stage.removeChild(difficulty.timeLeftText);
     removeChildSprite(environment);
     removeChildSprite(boat);
     removeChildSprite(slaveMaster);
     removeChildSprite(drum);
+    
+    stage.removeChild(difficulty.distanceLeftText);
+    stage.removeChild(difficulty.timeLeftText);
+    
+    canvas.removeChild(speedBar);
     
     // Important - need to check if slaves are children of the stage before
     // attempting to remove them
@@ -207,8 +263,8 @@ protected function exitPlayState(event:Event):void {
         removeChildSlave(slave4);
     }
     
-    // -- Stop timer
-    difficulty.timer.stop();
+    // -- Stop timers
+    pauseTimers();
 }
 
 protected function enterPausedState(event:Event):void {
@@ -323,6 +379,26 @@ protected function removeChildSlave(slave:Slave):void {
     --slaveCount;
 }
 
+protected function resumeTimers():void {
+    difficulty.resume();
+    drum.resume();
+    slaveMaster.resume();
+    slave1.resume();
+    slave2.resume();
+    slave3.resume();
+    slave4.resume();
+}
+
+protected function pauseTimers():void {
+    difficulty.pause();
+    drum.pause();
+    slaveMaster.pause();
+    slave1.pause();
+    slave2.pause();
+    slave3.pause();
+    slave4.pause();
+}
+
 override protected function keyDownHandler(event:KeyboardEvent):void {
     
     if (event.keyCode == Keyboard.ESCAPE) {
@@ -349,6 +425,14 @@ protected function helpButtonClicked(event:MouseEvent):void {
 }
 
 protected function helpBackButtonClicked(event:MouseEvent):void {
+    setCurrentState("StartState");
+}
+
+protected function creditsButtonClicked(event:MouseEvent):void {
+    setCurrentState("CreditsState");
+}
+
+protected function creditsBackButtonClicked(event:MouseEvent):void {
     setCurrentState("StartState");
 }
 

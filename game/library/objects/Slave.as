@@ -1,22 +1,30 @@
 package game.library.objects {
 	
-	import assets.Assets_slaveClass;
+	import assets.Assets;
+	
+	import flash.display.Sprite;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	import mx.controls.ProgressBar;
 	
 	import mx.core.Application;
 	
-	public class Slave extends assets.Assets_slaveClass {
+	public class Slave extends Sprite implements Pauseable {
 	    
 	    // ------- Properties -------
+	    public static const ROW_TIME_S:Number = 1;
+	    
 	    public static const DEFAULT_MAX_WHIPS:int = 10;
-	    public static const DEFAULT_OUTPUT:int = 1;
 	    public static const DEFAULT_PROGRESS_WIDTH:int = 50;
+	    
+	    public static const MIN_OUTPUT:Number = 1;
+	    public static const MAX_OUTPUT:Number = 20;
+	    public static const OUTPUT_DECREASE:Number = 1;
 	    
 	    
 	    // Counts the number of slaves created.
 	    private static var slaveCount:uint = 0;
-	    
 		
 		private var _id:uint;
 		private var _type:String;    // type descriptor of slave
@@ -35,6 +43,16 @@ package game.library.objects {
 		private var myHands:Hands;
 		
 		private var _progress:ProgressBar;
+		
+		private var _rowTimer:Timer = new Timer(ROW_TIME_S * 1000, 1);
+		private var paused:Boolean = false;
+		
+		// Slave Image
+		private var slaveImage:Sprite
+		    = new assets.Assets_slaveClass();
+		    
+		private var slaveRowImage:Sprite
+		    = new assets.Assets_slaveRowingClass();
 			  
 		// constructor
 		public function Slave() {
@@ -46,8 +64,13 @@ package game.library.objects {
 		    // position is also inherited
 		    name = "Default slave";
 		    
-		    _output = DEFAULT_OUTPUT;
+		    // Images
+		    this.addChild(slaveImage);
 		    
+		    // Output
+		    _output = MIN_OUTPUT;
+		    
+		    // Hands
 		    myHands = new Hands();
 			myHands.x = -68.3;
 			myHands.y = -17.3;
@@ -57,6 +80,7 @@ package game.library.objects {
 			this.addChild(myHands);
 			this.setChildIndex(myHands, 0);
 			
+			// Health bar
 			_progress = new ProgressBar();
 			_progress.visible = true;
 			_progress.label = "";
@@ -70,6 +94,54 @@ package game.library.objects {
             _progress.minimum = 0;
             //progress.maximum = _maxWhips;
             _progress.setProgress( (_maxWhips - _numWhips), _maxWhips );
+            
+            // Timer
+            _rowTimer.stop();
+            _rowTimer.addEventListener(TimerEvent.TIMER_COMPLETE,
+                                      onTimerComplete);
+		}
+		
+		public function update(frameRate:Number):void {
+		    
+		    // Decrease rowing output with time to a minimum
+		    if (_output > MIN_OUTPUT) {
+		        _output -= (OUTPUT_DECREASE / frameRate);
+		        //trace(name + " output: " + _output + " / " + MAX_OUTPUT);
+		    }
+		}
+		
+		public function doWhip():void {
+		    
+		    // Set health
+		    --_numWhips;
+		    
+		    // Set health bar
+		    _progress.setProgress( (_maxWhips - _numWhips), _maxWhips );
+		    
+		    // Set rowing output
+		    _output = MAX_OUTPUT;
+		    
+			trace(name + " health: " + _numWhips + " / " + _maxWhips);
+			trace(name + " output: " + _output + " / " + MAX_OUTPUT);
+		}
+		
+		public function doRow():void {
+		    
+		    // Set rowing image
+		    this.removeChild(slaveImage);
+		    this.addChild(slaveRowImage);
+            
+            // Start timer for how long the row stroke should last
+            _rowTimer.reset();
+            _rowTimer.start();
+        }
+		
+		public function isDead():Boolean {
+		    
+		    if (_numWhips <= 0) {
+		        return true;
+		    }
+		    return false;
 		}
 		
 		override public function set x(value:Number):void {
@@ -147,19 +219,30 @@ package game.library.objects {
 			return _progress;
 		}
 		
-		public function doWhip():void {
-		    --_numWhips;
-			trace(name + " health: " + _numWhips + " / " + _maxWhips);
-			
-			_progress.setProgress( (_maxWhips - _numWhips), _maxWhips );
+		public function pause():void {
+		    
+		    if (_rowTimer.running) {
+    		    paused = true;
+    		    _rowTimer.stop();
+		    }
 		}
 		
-		public function isDead():Boolean {
-		    
-		    if (_numWhips <= 0) {
-		        return true;
-		    }
-		    return false;
-		}
+        public function resume():void {
+            
+            if (paused) {
+                paused = false;
+                _rowTimer.start();
+            }
+        }
+		
+		private function onTimerComplete(event:TimerEvent):void 
+        {
+            // Stop rowing
+            _rowTimer.stop();
+            
+            // Change image
+            this.removeChild(slaveRowImage);
+            this.addChild(slaveImage);
+        }
 	}
 }
