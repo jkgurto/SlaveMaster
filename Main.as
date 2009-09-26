@@ -33,6 +33,10 @@ protected var reset:Boolean = true;
 protected var slaveCount:int = 0;
 
 // -- Methods
+protected function creationComplete(event:Event):void {
+    
+}
+
 protected function enterFrame(event:Event):void {
     
     if (currentState.toString() == "PlayState") {
@@ -163,7 +167,7 @@ protected function enterPlayState(event:Event):void {
     stage.addChild(difficulty.timeLeftText);
     
     // Layered in order
-    addChildEnvironment(environment);
+    addChildSprite(environment);
     addChildSprite(boat);
     addChildSlave(slave1);
     addChildSlave(slave2);
@@ -183,7 +187,7 @@ protected function exitPlayState(event:Event):void {
     
     stage.removeChild(difficulty.distanceLeftText);
     stage.removeChild(difficulty.timeLeftText);
-    removeChildEnvironment(environment);
+    removeChildSprite(environment);
     removeChildSprite(boat);
     removeChildSprite(slaveMaster);
     removeChildSprite(drum);
@@ -287,27 +291,6 @@ protected function slave4Click(event:MouseEvent):void {
         if (slaveCount <= 0) {
             setCurrentState("GameOverState");
         }
-    }
-}
-
-protected function addChildEnvironment(environment:Environment):void {
-
-    var component:UIComponent;
-    var collection:ArrayCollection = environment.sprites;
-    
-    for each (var sprite:Sprite in collection) {
-        component = new UIComponent();
-        component.addChild(sprite);
-        canvas.addChild(component);
-    }
-}
-
-protected function removeChildEnvironment(environment:Environment):void {
-    
-    var collection:ArrayCollection = environment.sprites;
-    
-    for each (var sprite:Sprite in collection) {
-        canvas.removeChild(sprite.parent);
     }
 }
 

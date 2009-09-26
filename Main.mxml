@@ -8,6 +8,7 @@
     height="600"
     frameRate="24"
     
+    creationComplete="creationComplete(event)"
     enterFrame="enterFrame(event)"
 
     currentState="StartState"
