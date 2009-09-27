@@ -1,4 +1,8 @@
+<<<<<<< HEAD:library/objects/Slave.as
 ﻿package library.objects {
+=======
+package game.library.objects {
+>>>>>>> origin/master:game/library/objects/Slave.as
 	import flash.display.*;
 	import flash.events.*;
 	//import library.objects.*;
