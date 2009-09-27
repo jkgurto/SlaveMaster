@@ -10,11 +10,9 @@ package game.library.objects {
 	
 	import mx.core.Application;
 	
-	public class Slave extends Sprite implements Pauseable {
+	public class Slave extends Sprite {
 	    
 	    // ------- Properties -------
-	    public static const ROW_TIME_S:Number = 1;
-	    
 	    public static const DEFAULT_MAX_WHIPS:int = 10;
 	    public static const DEFAULT_PROGRESS_WIDTH:int = 50;
 	    
@@ -43,9 +41,6 @@ package game.library.objects {
 		private var myHands:Hands;
 		
 		private var _progress:ProgressBar;
-		
-		private var _rowTimer:Timer = new Timer(ROW_TIME_S * 1000, 1);
-		private var paused:Boolean = false;
 		
 		// Slave Image
 		private var slaveImage:Sprite
@@ -94,11 +89,6 @@ package game.library.objects {
             _progress.minimum = 0;
             //progress.maximum = _maxWhips;
             _progress.setProgress( (_maxWhips - _numWhips), _maxWhips );
-            
-            // Timer
-            _rowTimer.stop();
-            _rowTimer.addEventListener(TimerEvent.TIMER_COMPLETE,
-                                      onTimerComplete);
 		}
 		
 		public function update(frameRate:Number):void {
@@ -125,15 +115,18 @@ package game.library.objects {
 			trace(name + " output: " + _output + " / " + MAX_OUTPUT);
 		}
 		
-		public function doRow():void {
+		public function startRow():void {
 		    
 		    // Set rowing image
 		    this.removeChild(slaveImage);
 		    this.addChild(slaveRowImage);
-            
-            // Start timer for how long the row stroke should last
-            _rowTimer.reset();
-            _rowTimer.start();
+        }
+        
+        public function stopRow():void {
+		    
+		    // Set rowing image
+		    this.removeChild(slaveRowImage);
+		    this.addChild(slaveImage);
         }
 		
 		public function isDead():Boolean {
@@ -218,31 +211,5 @@ package game.library.objects {
 		public function get progress():ProgressBar {
 			return _progress;
 		}
-		
-		public function pause():void {
-		    
-		    if (_rowTimer.running) {
-    		    paused = true;
-    		    _rowTimer.stop();
-		    }
-		}
-		
-        public function resume():void {
-            
-            if (paused) {
-                paused = false;
-                _rowTimer.start();
-            }
-        }
-		
-		private function onTimerComplete(event:TimerEvent):void 
-        {
-            // Stop rowing
-            _rowTimer.stop();
-            
-            // Change image
-            this.removeChild(slaveRowImage);
-            this.addChild(slaveImage);
-        }
 	}
 }

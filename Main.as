@@ -56,11 +56,19 @@ protected function enterFrame(event:Event):void {
         // -- Drum
         drum.update(stage.frameRate);
         
-        if (drum.rowTime) {
-            slave1.doRow();
-            slave2.doRow();
-            slave3.doRow();
-            slave4.doRow();
+        if (drum.startRow) {
+            drum.startRow = false;
+            slave1.startRow();
+            slave2.startRow();
+            slave3.startRow();
+            slave4.startRow();
+        }
+        else if (drum.stopRow) {
+            drum.stopRow = false;
+            slave1.stopRow();
+            slave2.stopRow();
+            slave3.stopRow();
+            slave4.stopRow();
         }
         
         // -- Environment
@@ -211,6 +219,8 @@ protected function enterPlayState(event:Event):void {
         drum.y = slaveMaster.y - slaveMaster.height + drum.height;
         drum.scaleX = SLAVE_SCALE;
         drum.scaleY = SLAVE_SCALE;
+        
+        boat.drum = drum;
     }
     
     // -- Add scene to stage
@@ -226,6 +236,8 @@ protected function enterPlayState(event:Event):void {
     
     stage.addChild(difficulty.distanceLeftText);
     stage.addChild(difficulty.timeLeftText);
+    
+    stage.addChild(drum.beatText);
     
     canvas.addChild(speedBar);
     
@@ -245,6 +257,8 @@ protected function exitPlayState(event:Event):void {
     
     stage.removeChild(difficulty.distanceLeftText);
     stage.removeChild(difficulty.timeLeftText);
+    
+    stage.removeChild(drum.beatText);
     
     canvas.removeChild(speedBar);
     
@@ -383,20 +397,12 @@ protected function resumeTimers():void {
     difficulty.resume();
     drum.resume();
     slaveMaster.resume();
-    slave1.resume();
-    slave2.resume();
-    slave3.resume();
-    slave4.resume();
 }
 
 protected function pauseTimers():void {
     difficulty.pause();
     drum.pause();
     slaveMaster.pause();
-    slave1.pause();
-    slave2.pause();
-    slave3.pause();
-    slave4.pause();
 }
 
 override protected function keyDownHandler(event:KeyboardEvent):void {

@@ -4,13 +4,17 @@ package game.library.objects {
     
     import flash.display.Sprite;
     
+    import game.library.objects.Drum;
     import game.library.objects.Slave;
     
     import mx.collections.ArrayCollection;
     
     public class Boat extends Sprite {
         
+        // Stores slaves for adding up speeds
         private var store:ArrayCollection = new ArrayCollection();
+        private var _drum:Drum = null;
+        
         private var boatImage:Sprite = new assets.Assets_boatClass();
         
         public function Boat() {
@@ -39,16 +43,35 @@ package game.library.objects {
             }
         }
         
+        public function set drum(value:Drum):void {
+            _drum = value;
+        }
+        
         public function get speed():Number {
             
             var speed:Number = 0;
+            var slave:Slave;
             
-            for each (var slave:Slave in store) {
+            for each (slave in store) {
                 
                 speed += slave.output;
             }
             
-            //trace("speed: " + speed);
+            // TODO boost when rowing
+            /*
+            if (_drum != null) {
+            
+                //if (_drum.rowing) {
+                    
+                    //var percent:Number = _drum.rowTimer.currentCount;
+                    //trace("percent: " + percent);
+                    //percent /= _drum.rowTimeS;
+                    //trace("percent: " + percent);
+                //}
+                
+                trace("speed: " + speed);
+            }
+            */
             
             return speed;
         }
