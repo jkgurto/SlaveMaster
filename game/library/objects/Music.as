@@ -1,4 +1,4 @@
-﻿package library.objects {
+﻿package game.library.objects {
 	import flash.display.*;
 	import flash.events.*;
 	//import library.objects.*;
