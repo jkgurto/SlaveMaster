@@ -3,6 +3,7 @@ package game.library.objects {
 	import assets.Assets;
 	
 	import flash.display.Sprite;
+	import flash.display.MovieClip;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
@@ -13,6 +14,8 @@ package game.library.objects {
 	public class Slave extends Sprite {
 	    
 	    // ------- Properties -------
+	    public static const SLAVE_SCALE:Number = 3.0;
+	    
 	    public static const DEFAULT_MAX_WHIPS:int = 10;
 	    public static const DEFAULT_PROGRESS_WIDTH:int = 50;
 	    
@@ -60,6 +63,12 @@ package game.library.objects {
 		    name = "Default slave";
 		    
 		    // Images
+		    slaveImage.scaleX = SLAVE_SCALE;
+		    slaveImage.scaleY = SLAVE_SCALE;
+		    
+		    slaveRowImage.scaleX = SLAVE_SCALE;
+		    slaveRowImage.scaleY = SLAVE_SCALE;
+		    
 		    this.addChild(slaveImage);
 		    
 		    // Output
