@@ -45,7 +45,7 @@
 				}
 				slave.y = slaveHeight;
 				renderer.addChild(slave);//this is the temporary solution
-				slave.setSpeed(1);
+				slave.setSpeed(2);
 			}
 			music = new Music("");
 
