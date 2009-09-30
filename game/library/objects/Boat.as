@@ -11,6 +11,8 @@ package game.library.objects {
     
     public class Boat extends Sprite {
         
+        public static const BOAT_SCALE:Number = 1.0;
+        
         // Stores slaves for adding up speeds
         private var store:ArrayCollection = new ArrayCollection();
         private var _drum:Drum = null;
@@ -18,6 +20,10 @@ package game.library.objects {
         private var boatImage:Sprite = new assets.Assets_boatClass();
         
         public function Boat() {
+            
+            boatImage.scaleX = BOAT_SCALE;
+            boatImage.scaleY = BOAT_SCALE;
+            
             this.addChild(boatImage);
         }
         

@@ -14,6 +14,8 @@
 	    public static var sound:assets.Assets_drumSoundClass =
 	        new assets.Assets_drumSoundClass();
 	        
+	    public static const DRUM_SCALE:Number = 0.5;
+	        
 	    // Time until next row
 	    public static const MIN_ROW_INTERVAL_S:Number = 0.5;
 	    public static const MAX_ROW_INTERVAL_S:Number = 3;
@@ -61,6 +63,10 @@
 		 * Needs some tweaking.
 		 */
 		public function Drum() {
+		    
+		    drumImage.scaleX = DRUM_SCALE;
+		    drumImage.scaleY = DRUM_SCALE;
+		    
 			this.addChild(drumImage);
 			
 			// -- Timer

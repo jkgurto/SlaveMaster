@@ -4,6 +4,7 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 
+import game.library.objects.Bench;
 import game.library.objects.Boat;
 import game.library.objects.Difficulty;
 import game.library.objects.Drum;
@@ -19,12 +20,24 @@ import mx.core.Application;
 import mx.core.UIComponent;
 import mx.core.SpriteAsset;
 
-// -- Variables
+// -- Constants
 protected const SPEED_BAR_WIDTH:int = 100;
 
+protected const MAX_SLAVES_PER_BENCH:int = 3;
+
+protected const BENCH_1:Point = new Point(150, 200);
+protected const BENCH_2:Point = new Point(150, 200);
+protected const BENCH_3:Point = new Point(150, 200);
+protected const BENCH_4:Point = new Point(150, 200);
+
+// -- Variables
 protected var boat:Boat = null;
 protected var drum:Drum = null;
 protected var environment:Environment = null;
+protected var bench1:Bench = null;
+protected var bench2:Bench = null;
+protected var bench3:Bench = null;
+protected var bench4:Bench = null;
 protected var slave1:Slave = null;
 protected var slave2:Slave = null;
 protected var slave3:Slave = null;
@@ -122,6 +135,9 @@ protected function enterPlayState(event:Event):void {
         // -- Boat
         boat = new Boat();
         
+        boat.x = 0;
+        boat.y = Application.application.height - boat.height;
+        
         // -- Difficulty
         difficulty = new Difficulty(boat);
         
@@ -129,20 +145,33 @@ protected function enterPlayState(event:Event):void {
         environment = new Environment();
         
         // -- Slaves
-        const SLAVE_SCALE:Number = 0.2;
-        const START:Point = new Point(200, 100);
-        const ROW_WIDTH:Number = 250;
+        
+        bench1 = new Bench();
+        bench1.start.x = BENCH_1.x;
+        bench1.start.y = BENCH_1.y;
+        
+        bench2 = new Bench();
+        bench2.start.x = BENCH_2.x;
+        bench2.start.y = BENCH_2.y;
+        
+        bench3 = new Bench();
+        bench3.start.x = BENCH_3.x;
+        bench3.start.y = BENCH_3.y;
+        
+        bench4 = new Bench();
+        bench4.start.x = BENCH_4.x;
+        bench4.start.y = BENCH_4.y;
         
         // - Slave 1
         slave1 = new Slave();
         
         slave1.name = "slave1";
         
-        slave1.scaleX = SLAVE_SCALE;
-        slave1.scaleY = SLAVE_SCALE;
+        //slave1.x = COL_1_X;
+        //slave1.y = ROW_1_Y;
+        bench1.addSlave(slave1);
         
-        slave1.x += START.x;
-        slave1.y += START.y;
+        trace("slave1.height " + slave1.height);
         
         slave1.addEventListener(MouseEvent.CLICK, slave1Click);
         
@@ -151,11 +180,9 @@ protected function enterPlayState(event:Event):void {
         
         slave2.name = "slave2";
         
-        slave2.scaleX = SLAVE_SCALE;
-        slave2.scaleY = SLAVE_SCALE;
-        
-        slave2.x += START.x + ROW_WIDTH;
-        slave2.y += START.y;
+        //slave2.x = COL_1_X + slave2.width + ROW_1_X_SPACER;
+        //slave2.y = ROW_1_Y;
+        bench1.addSlave(slave2);
         
         slave2.addEventListener(MouseEvent.CLICK, slave2Click);
         
@@ -164,11 +191,9 @@ protected function enterPlayState(event:Event):void {
         
         slave3.name = "slave3";
         
-        slave3.scaleX = SLAVE_SCALE;
-        slave3.scaleY = SLAVE_SCALE;
-        
-        slave3.x += START.x;
-        slave3.y += START.y + slave1.height;
+        //slave3.x += ROW_1_Y.x;
+        //slave3.y += ROW_1_Y.y + slave1.height;
+        bench1.addSlave(slave3);
         
         slave3.addEventListener(MouseEvent.CLICK, slave3Click);
         
@@ -177,11 +202,8 @@ protected function enterPlayState(event:Event):void {
         
         slave4.name = "slave4";
         
-        slave4.scaleX = SLAVE_SCALE;
-        slave4.scaleY = SLAVE_SCALE;
-        
-        slave4.x += START.x + ROW_WIDTH;
-        slave4.y += START.y + slave1.height;
+        //slave4.x += ROW_1_Y.x + ROW_WIDTH;
+        //slave4.y += ROW_1_Y.y + slave1.height;
         
         slave4.addEventListener(MouseEvent.CLICK, slave4Click);
         
@@ -207,18 +229,22 @@ protected function enterPlayState(event:Event):void {
         
         // -- Slave Master
         slaveMaster = new SlaveMaster();
-        slaveMaster.scaleX = SLAVE_SCALE;
-        slaveMaster.scaleY = SLAVE_SCALE;
+        slaveMaster.scaleX = 0.2;
+        slaveMaster.scaleY = 0.2;
         
-        slaveMaster.x += START.x + ROW_WIDTH;
-        slaveMaster.y += START.y + slave2.height + slave4.height;
+        //slaveMaster.x += COL_1_X;
+        //slaveMaster.y += ROW_1_Y;
         
         // -- Drum
         drum = new Drum();
-        drum.x = slaveMaster.x;
-        drum.y = slaveMaster.y - slaveMaster.height + drum.height;
-        drum.scaleX = SLAVE_SCALE;
-        drum.scaleY = SLAVE_SCALE;
+        
+        //drum.scaleX = SLAVE_SCALE;
+        //drum.scaleY = SLAVE_SCALE;
+        
+        //drum.x = slaveMaster.x;
+        //drum.y = slaveMaster.y - slaveMaster.height + drum.height;
+        //drum.x = ROW_1_Y.x + ROW_WIDTH;
+        //drum.y = ROW_1_Y.y;
         
         boat.drum = drum;
     }
@@ -227,6 +253,7 @@ protected function enterPlayState(event:Event):void {
     // Layered in order
     addChildSprite(environment);
     addChildSprite(boat);
+    addChildSprite(bench1);
     addChildSlave(slave1);
     addChildSlave(slave2);
     addChildSlave(slave3);

@@ -31,7 +31,7 @@ package game.library.objects {
         public static const MIN_SKY_Y:Number = -50;
         public static const MAX_SKY_Y:Number = 100;
         
-        public static const SUN_SCALE:Number = 0.2;
+        public static const SUN_SCALE:Number = 1.0;
         
         public static const NUM_CLOUDS:Number = 5;
         public static const CLOUD_SCALE:Number = 0.2;

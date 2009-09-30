@@ -14,7 +14,7 @@ package game.library.objects {
 	public class Slave extends Sprite {
 	    
 	    // ------- Properties -------
-	    public static const SLAVE_SCALE:Number = 3.0;
+	    public static const SLAVE_SCALE:Number = 0.8;
 	    
 	    public static const DEFAULT_MAX_WHIPS:int = 10;
 	    public static const DEFAULT_PROGRESS_WIDTH:int = 50;
