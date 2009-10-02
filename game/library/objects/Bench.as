@@ -8,13 +8,18 @@ package game.library.objects
     {
         public static const MAX_SLAVES:int = 3;
         
-        // Top left hand side of bench
-        // Use this because addChild changes the x and y coordinates of the
-        // bench.
-        private var _start:Point = new Point();
+        public static var _point1:Point = new Point(0, 0);
+        public static var _point2:Point = new Point(70, 0);
+        public static var _point3:Point = new Point(140, 0);
+        
+        // Points along the bench
+        private var points:Array = new Array();
         
         public function Bench()
         {
+            points.push(_point1);
+            points.push(_point2);
+            points.push(_point3);
         }
         
         //override private function addChild(child:DisplayObject):DisplayObject {
@@ -27,25 +32,34 @@ package game.library.objects
                 return;
             }
             
-            slave.x = _start.x;
-            slave.y = _start.y;
-            
-            var i:int;
-            var s:Sprite;
-            for (i = 0; i < this.numChildren; ++i) {
-                s = this.getChildAt(i) as Sprite;
-                slave.x += s.width;
-            }
+            slave.x = this.x + points[this.numChildren].x;
+            slave.y = this.y + points[this.numChildren].y;
             
             this.addChild(slave);
         }
         
-        public function get start():Point {
-            return _start;
+        public function get point1():Point {
+            return _point1;
         }
         
-        public function set start(value:Point):void {
-            _start = value;
+        public function set point1(value:Point):void {
+            _point1 = value;
+        }
+        
+        public function get point2():Point {
+            return _point2;
+        }
+        
+        public function set point2(value:Point):void {
+            _point2 = value;
+        }
+        
+        public function get point3():Point {
+            return _point3;
+        }
+        
+        public function set point3(value:Point):void {
+            _point3 = value;
         }
 
     }
