@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application
+    xmlns:mx="http://www.adobe.com/2006/mxml"
+    
+    layout="absolute"
+    
+    width="800"
+    height="600"
+    frameRate="30"
+    backgroundColor="#66CCFF"
+    
+    applicationComplete="applicationComplete(event)"
+    >
+    
+    <mx:Canvas
+        id="canvas"
+        x="0"
+        y="0"
+        width="800"
+        height="600"
+        >
+    </mx:Canvas>
+    
+    <mx:Script>
+        <![CDATA[
+            
+            import flash.events.Event;
+            import Main;
+            
+            public var main:Main = null;
+            
+            // creationComplete is too early
+            protected function applicationComplete(event:Event):void {
+                main = new Main();
+                stage.addChild(main);
+                main.setup();
+            }
+            
+        ]]>
+    </mx:Script>
+    
+</mx:Application>
